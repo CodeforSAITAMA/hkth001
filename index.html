@@ -1,0 +1,82 @@
+<!DOCTYPE html> 
+<html lang="ja"> 
+<head>
+<title>埼玉 ハッカソン</title>
+<meta charset="UTF-8" />
+<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+<link rel="stylesheet" href="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.css" />
+<script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
+<script src="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.js"></script>
+<style>
+body,html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
+#map {
+    width: 100%;
+    height: calc(100% - 100px);
+}
+</style>
+<link rel="stylesheet" href="js/colorbox/colorbox.css" />
+<script src="js/colorbox/jquery.colorbox.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/openlayers/2.13.1/OpenLayers.debug.js"></script>
+<script>
+var lat=35.949975,lng=139.693;
+var map, zoom=12;
+function init(){
+    var arrayOSM = ["http://otile1.mqcdn.com/tiles/1.0.0/map/${z}/${x}/${y}.jpg",
+            "http://otile2.mqcdn.com/tiles/1.0.0/map/${z}/${x}/${y}.jpg",
+            "http://otile3.mqcdn.com/tiles/1.0.0/map/${z}/${x}/${y}.jpg",
+            "http://otile4.mqcdn.com/tiles/1.0.0/map/${z}/${x}/${y}.jpg"];
+
+    map = new OpenLayers.Map('map', {
+        projection: 'EPSG:3857',
+        controls: [
+            new OpenLayers.Control.Navigation(), 
+            new OpenLayers.Control.PanZoomBar(), 
+            new OpenLayers.Control.Attribution(),
+            new OpenLayers.Control.Scale(),
+            new OpenLayers.Control.ScaleLine()
+        ],
+        layers: [
+            new OpenLayers.Layer.OSM("OpenStreetMap", arrayOSM),
+            new OpenLayers.Layer.XYZ(
+                "GSI Maps",
+                'http://cyberjapandata.gsi.go.jp/xyz/std/${z}/${x}/${y}.png',
+                {
+                    attribution: '<a href="http://portal.cyberjapan.jp/help/termsofuse.html" target="_blank">国土地理院</a>',
+                    maxZoomLevel: 17
+                }
+            ),
+            new OpenLayers.Layer.XYZ(
+                "GSI Maps Light-colored",
+                'http://cyberjapandata.gsi.go.jp/xyz/pale/${z}/${x}/${y}.png',
+                {
+                    attribution: '<a href="http://portal.cyberjapan.jp/help/termsofuse.html" target="_blank">国土地理院</a>',
+                    maxZoomLevel: 17
+                }
+            )
+        ],
+        center: new OpenLayers.LonLat(lng, lat)
+            // Google.v3 uses web mercator as projection, so we have to
+            // transform our coordinates
+            .transform('EPSG:4326', 'EPSG:3857'),
+        zoom: zoom
+    });
+
+
+	//今昔レイヤー
+	
+}
+</script> 
+</head>
+<body onload="init()">
+<div id="mapLoad" data-role="page">
+    <div id="map" data-role="content"></div>
+    <div data-role="footer" data-position="fixed" data-id="persist">
+    </div>
+</div>
+</body>
+</html>
